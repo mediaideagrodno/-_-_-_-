@@ -1,0 +1,2228 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+@font-face {
+    font-family: 'Soledago';
+    src: url('fonts/soledago.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+
+
+
+/* Обнуляем отступы браузера */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Montserrat', sans-serif; /* Поменял с Segoe UI на Montserrat для стиля */
+}
+
+/* Главный блок с картинкой */
+.hero {
+    position: relative;
+    height: 90vh;
+    background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), 
+                url('фон.jpg') no-repeat center center / cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom-left-radius: 80px;
+    border-bottom-right-radius: 80px;
+    overflow: hidden;
+    color: white;
+}
+
+.hero h1 {
+    font-size: 4rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    font-family: 'Soledago', serif;
+}
+
+/* Кнопка "Начать прогулку" */
+.start-btn {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.2); 
+    backdrop-filter: blur(15px);
+    padding: 35px 90px 20px 90px; 
+    min-width: 220px;
+    border-radius: 50px 50px 0 0; 
+    color: white;
+    text-decoration: none;
+    font-size: 1.6rem;
+    letter-spacing: 1px;
+    text-align: center;
+    transition: 0.4s ease;
+    font-family: "Montserrat", sans-serif;
+}
+
+.start-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    padding-top: 45px;
+}
+
+/* Меню */
+.main-menu {
+    position: relative; /* Чтобы фон не вылетал */
+    overflow: hidden;
+    min-height: 60vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 40px; 
+}
+
+/*  Фоновая надпись */
+.menu-bg-text {
+    position: absolute;
+    font-family: 'Soledago', serif;
+    font-size: 22vw;
+    color: rgba(0, 0, 0, 0.03); /* Очень бледная */
+    z-index: 0;
+    pointer-events: none;
+    letter-spacing: 10px;
+    text-transform: lowercase;
+}
+
+.menu-container {
+    position: relative;
+    z-index: 1; /* Чтобы меню было поверх фона */
+    max-width: 1100px;
+    text-align: center;
+    line-height: 2.8;
+}
+
+.main-menu a {
+    font-family: 'Montserrat', sans-serif;
+    text-decoration: none;
+    color: #2c2c2c;
+    font-size: 1.3rem;
+    font-weight: 400;
+    text-transform: lowercase;
+    transition: all 0.3s ease;
+    margin: 0 15px;
+    letter-spacing: 0.5px;
+    display: inline-block;
+}
+
+.main-menu a:hover {
+    color: #999;
+    transform: translateY(-2px);
+}
+
+.divider {
+    font-family: 'Montserrat', sans-serif;
+    color: #d1d1d1;
+    font-size: 1.4rem;
+    font-weight: 300;
+    margin: 0 5px;
+}
+
+/* 1. ОСНОВНАЯ СЕКЦИЯ — ПОДНИМАЕМ ВВЕРХ */
+.slider-section {
+    min-height: 80vh; /* Уменьшили высоту, чтобы не было дыр снизу */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fdfdfd;
+    padding: 0; /* Убрали внутренние отступы */
+    margin-top: -80px; /* ТЯНЕМ ВЕСЬ БЛОК К МЕНЮ */
+}
+
+.slider-wrapper {
+    position: relative;
+    width: 90%;
+    max-width: 1100px;
+    height: 600px;
+    display: flex;
+    align-items: center;
+}
+
+/* 2. СЛАЙДЫ И ФОРМАТЫ */
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 70px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1.5s cubic-bezier(0.25, 1, 0.5, 1), visibility 1.5s;
+}
+
+.slide.active { opacity: 1; visibility: visible; }
+
+.slide-img-wrap {
+    flex: 1.1;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.04);
+}
+
+.format-12-8 .slide-img-wrap { aspect-ratio: 12 / 8; height: auto; }
+
+.format-vertical .slide-img-wrap {
+    aspect-ratio: 8 / 12;
+    height: 550px;
+    width: auto;
+    margin: 0 auto;
+}
+
+.slide-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.1);
+    transition: transform 3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.slide.active .slide-img-wrap img { transform: scale(1); }
+
+/* 3. АНИМАЦИЯ ВЫТЕСНЕНИЯ ТЕКСТА (Улет вверх / Прилет снизу) */
+.slide-content {
+    flex: 0.9;
+    opacity: 0;
+    transform: translateY(80px); 
+    transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.2s ease;
+    pointer-events: none;
+}
+
+.slide.active .slide-content {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    transition-delay: 0.5s; 
+}
+
+.slide:not(.active) .slide-content {
+    opacity: 0;
+    transform: translateY(-80px);
+    transition: transform 0.8s cubic-bezier(0.4, 0, 1, 1), opacity 0.8s linear;
+}
+
+/* 4. ОФОРМЛЕНИЕ ТЕКСТА */
+.slide-number {
+    font-family: 'Soledago', serif;
+    font-size: 6rem;
+    color: rgba(0,0,0,0.03);
+    margin-bottom: -45px;
+    display: block;
+}
+
+.slide-title {
+    font-family: 'Soledago', serif;
+    font-size: 3rem;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+}
+
+.slide-quote {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    color: #666;
+    font-style: italic;
+    line-height: 1.8;
+    border-left: 2px solid #eee;
+    padding-left: 25px;
+    max-width: 450px;
+}
+
+/* 5. НАВИГАЦИЯ — ПЛОТНО К КОНТЕНТУ */
+.slider-nav {
+    position: absolute;
+    bottom: -30px;
+    left: 48%;
+    transform: translateX(-50%); 
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    z-index: 100;
+
+}
+
+.nav-btn {
+    background: transparent;
+    border: 1px solid #e1e7ed;
+    padding: 12px 25px;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+     
+}
+
+.btn-text {
+    font-family: 'Montserrat', sans-serif;
+    text-transform: lowercase;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: #555;
+}
+
+.arrow { font-size: 1.1rem; color: #888; }
+
+.nav-btn:hover {
+    background-color: #1a1a1a; 
+    border-color: #1a1a1a;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.nav-btn:hover .btn-text, .nav-btn:hover .arrow { color: #fff; }
+
+.prev:hover .arrow { transform: translateX(-4px); }
+.next:hover .arrow { transform: translateX(4px); }
+
+
+.voice-section {
+     margin-top: 150px;
+    min-height: 100vh;
+    padding: 40px 0 100px 0;
+    background-color: #fdfdfd;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Красивый и современный заголовок */
+.voice-section {
+    
+    padding: 100px 0 80px 0;
+    background-color: #fdfdfd;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Обертка для позиционирования слоев */
+.voice-header-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 120px; /* Увеличили отступ до контента */
+}
+
+/* Гигантское фоновое слово "голос" */
+.voice-bg-fade {
+    position: absolute;
+    font-family: 'Soledago', serif;
+    font-size: 14vw; /* Масштаб от ширины экрана */
+    color: rgba(0, 0, 0, 0.02); /* Почти прозрачный серый */
+    text-transform: lowercase;
+    z-index: 0;
+    pointer-events: none;
+    letter-spacing: -10px;
+    white-space: nowrap;
+}
+
+/* Твой основной заголовок с улучшениями */
+.section-title {
+    position: relative;
+    z-index: 1;
+    font-family: 'Soledago', serif;
+    font-size: 5rem;
+    font-weight: 400;
+    text-transform: lowercase;
+    letter-spacing: 2px;
+    color: #1a1a1a;
+    margin-bottom: 0; /* Обнуляем, так как отступ теперь у wrapper */
+}
+
+
+
+
+.voice-container {
+    display: flex;
+    max-width: 1300px;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: -20px;
+}
+
+/* Смещение печати влево */
+.seal-side {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 60px;
+}
+
+.seal-wrapper {
+    width: 380px;
+    height: 380px;
+    position: relative;
+    transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.seal-svg { width: 100%; height: 100%; overflow: visible; }
+
+.seal-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    fill: #ccc;
+}
+
+.clickable-name { 
+    cursor: pointer; 
+    transition: fill 0.3s; 
+}
+.clickable-name:hover { fill: #000; font-weight: bold; }
+
+.seal-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 75px; height: 75px;
+    border: 1px solid #1a1a1a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Soledago', serif;
+    font-size: 1.5rem;
+    background: #fff;
+}
+
+/* Видео 16:9 справа */
+.video-side {
+    flex: 1.3;
+    padding-right: 60px;
+}
+
+.video-window {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.07);
+    margin-bottom: 30px;
+}
+
+#hero-video-file {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Чтобы видео заполняло экран 16:9 */
+}
+
+.hero-meta h3 {
+    font-family: 'Soledago', serif;
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.hero-meta p {
+    font-family: 'Montserrat', sans-serif;
+    color: #888;
+    margin-bottom: 20px;
+}
+
+.hero-quote {
+    font-style: italic;
+    border-left: 2px solid #e1e7ed;
+    padding-left: 25px;
+    color: #444 !important;
+}
+
+
+.history-section {
+    padding: 120px 0 60px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fdfdfd;
+}
+
+.history-header-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 100px; /* Отступ до контента */
+    width: 100%;
+}
+
+/* Огромное фоновое слово (эффект глубины) */
+.bg-title-fade {
+    position: absolute;
+    font-family: 'Soledago', serif;
+    font-size: 15vw; /* Зависит от ширины экрана */
+    color: rgba(0, 0, 0, 0.02); /* Почти прозрачное */
+    text-transform: lowercase;
+    z-index: 0;
+    pointer-events: none;
+    letter-spacing: -5px;
+}
+
+/* Основной заголовок */
+.history-main-title {
+    position: relative;
+    z-index: 1;
+    font-family: 'Soledago', serif;
+    font-size: 5.5rem; /* Крупный, уверенный масштаб */
+    font-weight: 400;
+    text-transform: lowercase;
+    color: #1a1a1a;
+    letter-spacing: 2px;
+}
+
+/* Маленькая декоративная точка или черточка под заголовком */
+.history-main-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #b5a073; /* Золотистый акцент для благородства */
+    margin: 20px auto 0;
+}
+
+
+/* ОБЩАЯ СЕКЦИЯ */
+.history-section {
+    padding: 60px 0 100px 0;
+    background-color: #fdfdfd;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* КОНТЕЙНЕР ДЛЯ ВСЕХ 6 ИСТОРИЙ */
+.history-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    min-height: 500px;
+}
+
+/* ОДИН БЛОК ИСТОРИИ */
+.history-grid-layout {
+    display: none; /* Скрыты по умолчанию */
+    width: 100%;
+    gap: 80px;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    transform: translateY(20px);
+}
+
+/* АКТИВНАЯ ИСТОРИЯ (ПОЯВЛЯЕТСЯ) */
+.history-grid-layout.active-story {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ФОТО КАРТОЧКА (как на скрине) */
+.historical-photo-frame {
+    flex: 1;
+    padding: 15px 15px 45px 15px;
+    background: #fff;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.04);
+    border: 1px solid #eee;
+    transform: rotate(-1.5deg); /* Легкий исторический наклон */
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.historical-photo-frame:hover {
+    transform: rotate(0deg) scale(1.02);
+}
+
+.photo-inner img {
+    width: 100%;
+    filter: sepia(0.3) contrast(1.1); /* Эффект архива */
+    display: block;
+}
+
+.photo-caption {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    color: #aaa;
+    margin-top: 15px;
+    text-align: left;
+}
+
+/* ТЕКСТОВАЯ ЧАСТЬ */
+.historical-text-wrapper {
+    flex: 1.2;
+    position: relative;
+    padding-left: 40px;
+}
+
+/* Полупрозрачное слово на фоне */
+.text-bg-accent {
+    position: absolute;
+    top: -40px;
+    left: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 7rem;
+    font-weight: 900;
+    color: rgba(0, 0, 0, 0.03);
+    text-transform: uppercase;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.text-inner-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* ЖИРНЫЙ ГОД (как на скрине) */
+.text-inner-content h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900; 
+    font-size: 6.5rem; /* Масштабно и жирно */
+    color: #1a1a1a;
+    line-height: 1;
+    margin-bottom: 25px;
+    letter-spacing: -2px;
+}
+
+/* ОСНОВНОЙ ТЕКСТ (ИСТОРИЧЕСКИЙ) */
+.text-inner-content p {
+    font-family: 'Montserrat', sans-serif;
+    font-style: italic; /* Твой любимый наклон */
+    line-height: 1.8;
+    color: #555;
+    font-size: 1.1rem;
+    max-width: 450px;
+}
+
+
+/* НАВИГАЦИЯ-ТАЙМЛАЙН (КАК В FIGMA) */
+.history-timeline-nav {
+    margin-top: 80px;
+    position: relative;
+    width: 600px;
+    display: flex; justify-content: center;
+}
+
+.timeline-line {
+    position: absolute;
+    top: 50%; width: 100%; height: 1px;
+    background: #b5a073; /* Золотистая линия */
+}
+
+.dots-container {
+    width: 100%;
+    display: flex; justify-content: space-between; align-items: center;
+    position: relative; z-index: 1;
+}
+
+.dot-item {
+    position: relative;
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+}
+
+/* 1. САМА ТОЧКА (Маленькая) */
+.dot {
+    width: 10px;
+    height: 10px;
+    background: #b5a073; /* По умолчанию закрашена золотом */
+    border-radius: 50%;
+    border: 2px solid transparent; /* Запас для рамки */
+    transition: 0.3s all ease;
+}
+
+/* 2. ПРОЙДЕННЫЕ ТОЧКИ (Закрашиваются темным) */
+.dot-item.past .dot { 
+    background: #1a1a1a; 
+}
+
+/* 3. АКТИВНАЯ ТОЧКА (Тот самый эффект: становится ПУСТЫМ КОЛЬЦОМ) */
+.dot-item.active .dot { 
+    background: transparent !important; /* Убираем заливку внутри */
+    border: 2px solid #b5a073; /* Делаем её золотым колечком */
+}
+
+/* 4. БОЛЬШАЯ ОКРУЖНОСТЬ ВОКРУГ (Второе кольцо) */
+.selection-ring {
+    position: absolute;
+    width: 30px; /* Размер большого кольца */
+    height: 30px;
+    border: 1px solid #b5a073; /* Тонкая золотая линия */
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0.5); /* Эффект появления */
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Когда точка активна — показываем большое кольцо */
+.dot-item.active .selection-ring { 
+    opacity: 1; 
+    transform: scale(1); 
+}
+/* Плавное появление для контента */
+#history-content-area {
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* Класс, который мы будем на мгновение добавлять через JS */
+.fade-out {
+    opacity: 0;
+    transform: translateY(20px);
+}
+.photo-inner {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3; /* Или любой твой формат */
+    background: #000;
+    overflow: hidden;
+}
+
+.photo-inner img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.8s ease-in-out; /* Плавность 0.8 сек */
+}
+
+/* Верхнее фото (старое) по умолчанию видно */
+.img-front {
+    z-index: 2;
+    opacity: 1;
+}
+
+/* Нижнее фото (новое) */
+.img-back {
+    z-index: 1;
+}
+
+/* Когда добавляем класс flipped — старое фото тает */
+.photo-inner.flipped .img-front {
+    opacity: 0;
+}
+
+
+.river-section {
+    position: relative;
+    background: #fdfdfd;
+    padding-bottom: 120px;
+    overflow: hidden;
+}
+/* ЭТО ТО САМОЕ ПРАВИЛО, КОТОРОЕ ВСЁ ЧИНИТ */
+.historical-photo-frame.flipped .img-front {
+    opacity: 0 !important;
+}
+
+/* На всякий случай проверь базу для картинок */
+.photo-inner {
+    position: relative;
+    overflow: hidden;
+}
+
+.img-front {
+    position: absolute;
+    top: 0; left: 0;
+    z-index: 2;
+    transition: opacity 0.8s ease; /* Чтобы плавно исчезало */
+}
+
+.img-back {
+    position: relative; /* Или absolute */
+    z-index: 1;
+}
+
+/* ВОЛНА СВЕРХУ */
+/* ПЕРЕХОД */
+.cloud-transition {
+    width: 100%;
+    height: 200px;
+    margin-top: -190px; /* ЭТОТ МИНУС ЗАСТАВЛЯЕТ ОБЛАКО НАЛЕЗТЬ НА ИСТОРИЮ */
+    position: relative;
+    z-index: 10;
+    line-height: 0;
+}
+
+.cloud-transition svg {
+    width: 100%;
+    height: 100%;
+    filter: blur(8px); /* Создает эффект тумана/облака */
+}
+
+/* СЕКЦИЯ РЕКИ */
+.river-section {
+    background-color: #fdfdfd;
+    padding: 20px 0 100px 0;
+    position: relative;
+    z-index: 11;
+}
+
+.river-header {
+    text-align: center;
+    position: relative;
+    margin-bottom: 100px;
+}
+
+.river-bg-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Soledago', serif;
+    font-size: 18vw;
+    color: rgba(0, 0, 0, 0.02);
+    z-index: 0;
+}
+
+.river-title {
+    font-family: 'Soledago', serif;
+    font-size: 5rem;
+    position: relative;
+    z-index: 1;
+}
+
+
+/* КОНТЕЙНЕР ЭССЕ */
+.essays-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+}
+
+/* КАРТОЧКА ЭССЕ */
+.essay-card {
+    width: 60%;
+    align-self: flex-start; /* Слева */
+    background: #fff;
+    padding: 50px;
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    position: relative;
+    transition: 0.5s ease;
+}
+
+/* Эффект течения (шахматный порядок) */
+.essay-card.alternate {
+    align-self: flex-end; /* Справа */
+    border-right: 4px solid #b5a073; /* Золотистый акцент */
+}
+
+.essay-card:not(.alternate) {
+    border-left: 4px solid #b5a073;
+}
+
+.essay-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.06);
+}
+
+.essay-title {
+    font-family: 'Soledago', serif;
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    color: #1a1a1a;
+}
+
+.essay-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.essay-author {
+    font-family: 'Montserrat', sans-serif;
+    font-style: italic;
+    font-weight: 500;
+    color: #999;
+    display: block;
+    text-align: right;
+}
+.river-section {
+    background-color: #fdfdfd;
+    padding-bottom: 100px;
+    position: relative;
+    overflow: hidden; /* Чтобы листья не вылазили за край сайта */
+}
+
+/* ОБЛАЧНЫЙ ПЕРЕХОД */
+.river-transition-cloud {
+    position: absolute;
+    top: -150px; /* Наплываем на историю */
+    left: 0;
+    width: 100%;
+    height: 300px;
+    z-index: 5;
+    pointer-events: none;
+}
+
+/* Сам мягкий край облака (белый градиент) */
+.cloud-bottom {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, #fdfdfd 70%);
+}
+
+/* ЛИСТЬЯ (ТЕНИ) */
+.leaf {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.15; /* Делаем их бледными тенями, как на фото */
+    filter: blur(1px); /* Легкое размытие для естественности */
+    z-index: 4;
+}
+
+.leaf-left {
+    top: 50px;
+    left: -50px;
+    background-image: url('leaf-left.png'); /* Подгрузи сюда картинку ветки */
+    transform: rotate(15deg);
+}
+
+.leaf-right {
+    top: 0;
+    right: -100px;
+    background-image: url('leaf-right.png'); /* И сюда */
+    transform: rotate(-20deg) scaleX(-1); /* Отражаем для симметрии */
+}
+
+/* ТИПОГРАФИКА (как на референсе) */
+.river-header {
+    margin-top: 100px;
+    position: relative;
+    text-align: center;
+}
+
+.river-title {
+    font-family: 'Soledago', serif;
+    font-size: 5.5rem;
+    color: #4a5d45; /* Сделаем цвет надписи темно-зеленым, как на твоем фото */
+    text-transform: lowercase;
+    position: relative;
+    z-index: 6;
+}
+
+
+:root {
+    --accent-brown: #8D7466; /* Коричневый с твоей картинки */
+    --gold: #b5a073;
+    --card-bg: #FFFFFF;
+}
+
+/* ФОН И ЗАГОЛОВОК */
+.heroes-section {
+    background-color: #F9F6F2;
+    padding: 100px 20px;
+}
+
+.heroes-header-wrapper {
+    position: relative;
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-title {
+    font-family: 'Soledago', serif;
+    font-size: 5rem;
+    color: var(--accent-brown);
+    margin: 0;
+    text-transform: lowercase;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--gold);
+    margin: 15px auto 0;
+}
+
+/* КАРТОЧКА */
+.fridge-list-card {
+    max-width: 650px;
+    margin: 0 auto;
+    background: var(--card-bg);
+    padding: 50px;
+    border-radius: 40px;
+    box-shadow: 0 15px 45px rgba(141, 116, 102, 0.1);
+}
+
+.list-internal-header {
+    font-family: 'Soledago', serif;
+    text-align: left;
+    font-size: 2.2rem;
+    color: var(--accent-brown);
+    margin-bottom: 40px;
+}
+
+/* НИТКА И БУСИНЫ */
+.thread-container {
+    position: relative;
+    padding-left: 50px;
+}
+
+.vertical-thread {
+    position: absolute;
+    left: 14px; /* Ровно по центру бусин */
+    top: 10px;
+    bottom: 10px;
+    width: 4px; /* Жирная нитка */
+    background-color: var(--accent-brown);
+    opacity: 0.2;
+    z-index: 1;
+}
+
+.beads-list {
+    list-style: none;
+    padding: 0;
+}
+
+.bead-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+    margin-bottom: 30px;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Бусина в покое (невидимка-палочка) */
+.bead-circle {
+    min-width: 4px;
+    height: 32px;
+    background: var(--accent-brown);
+    border-radius: 10px;
+    z-index: 2;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Бусина оживает при HOVER */
+.bead-item:hover .bead-circle {
+    min-width: 32px;
+    height: 32px;
+    margin-left: -14px; /* Центрирование */
+    background: #fff;
+    border: 3px solid var(--accent-brown);
+    border-radius: 50%;
+}
+
+/* Бусина ЗАПОЛНЕНА после клика */
+.bead-item.active .bead-circle {
+    min-width: 32px;
+    height: 32px;
+    margin-left: -14px;
+    background: var(--accent-brown);
+    border-radius: 50%;
+}
+
+/* ТЕКСТ ВНУТРИ */
+.bead-text h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--accent-brown);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.bead-text p {
+    margin: 5px 0 0;
+    font-size: 0.95rem;
+    color: #7A6A61;
+    line-height: 1.4;
+}
+/* ОБЕРТКА ЗАГОЛОВКА */
+.heroes-header-wrapper {
+    position: relative;
+    text-align: center;
+    padding: 120px 0 60px; /* Увеличил отступы для 16vw */
+    overflow: hidden;      /* Чтобы буквы не вылезали за края сайта */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ФОНОВОЕ СЛОВО (СОЦИУМ) */
+.heroes-bg-fade {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Soledago', serif;
+    font-size: 16vw;          /* Твой размер */
+    color: rgba(0, 0, 0, 0.02); /* Твоя прозрачность */
+    z-index: 0;
+    pointer-events: none;
+    letter-spacing: -5px;
+    white-space: nowrap;
+    text-transform: lowercase;
+}
+
+/* ОСНОВНОЙ ЗАГОЛОВОК */
+.section-title {
+    position: relative;
+    z-index: 1;
+    font-family: 'Soledago', serif;
+    font-size: 5rem;
+    color: #8D7466; /* Коричневый с картинки */
+    margin: 0;
+    text-transform: lowercase;
+}
+
+/* ЗОЛОТАЯ ЛИНИЯ */
+.section-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #b5a073; 
+    margin: 15px auto 0;
+}
+.heroes-section {
+    position: relative;
+    overflow: hidden; /* Чтобы пятна не создавали прокрутку */
+    background-color: #F9F6F2;
+}
+
+/* Эффект шума (зернистость бумаги) */
+.bg-texture {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Верхнее мягкое пятно */
+.bg-blob-top {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, #E8DED1 0%, rgba(249, 246, 242, 0) 70%);
+    top: -200px;
+    right: -100px;
+    z-index: 0;
+    opacity: 0.6;
+}
+
+/* Нижнее мягкое пятно */
+.bg-blob-bottom {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, #c5bf44 0%, rgba(249, 246, 242, 0) 70%);
+    bottom: -100px;
+    left: -100px;
+    z-index: 0;
+    opacity: 0.5;
+}
+
+/* Сама карточка должна быть чуть приподнята */
+.fridge-list-card {
+    position: relative;
+    z-index: 2; /* Поверх пятен */
+    /* Добавляем легкое свечение вокруг карточки */
+    box-shadow: 0 20px 60px rgba(255, 248, 244, 0.12);
+}
+.heroes-section {
+    position: relative;
+    /* Вместо обычного цвета делаем сложный градиент-пятна */
+    background: 
+        radial-gradient(circle at 10% 10%, #E8DED1 0%, transparent 40%), /* Пятно слева сверху */
+        radial-gradient(circle at 90% 80%, #D1C7C1 0%, transparent 50%), /* Пятно справа снизу */
+        #F9F6F2; /* Основной подкладочный цвет */
+    
+    padding: 100px 20px;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Добавим эффект "зернистой бумаги", чтобы фон не был пластмассовым */
+.heroes-section::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: -1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65'/%3E%3C/svg%3E");
+}
+
+/* Сама карточка должна отбрасывать мягкую тень, чтобы "оторваться" от фона */
+.fridge-list-card {
+    position: relative;
+    z-index: 10;
+    background: #FFFFFF;
+    border-radius: 40px;
+    box-shadow: 0 30px 60px rgba(141, 116, 102, 0.15); /* Жирная мягкая тень */
+}
+/* 1. Настройка самой секции, чтобы пузырьки не улетали за границы */
+.heroes-section {
+    position: relative;
+    overflow: hidden; /* Важно: чтобы не было полос прокрутки */
+    min-height: 100vh;
+    background-color: #F9F6F2;
+    z-index: 1;
+}
+
+/* 2. Общий стиль пузырька (ЯРКИЙ и ОБЪЕМНЫЙ) */
+.bubble {
+    position: absolute;
+    bottom: -200px; /* Начинают за пределами экрана снизу */
+    border-radius: 50%;
+    z-index: 0; /* Под списком */
+    pointer-events: none; /* Чтобы не мешали кликать по списку */
+    
+    /* Твой яркий градиент и блик */
+    background: radial-gradient(circle at 30% 30%, 
+                rgba(141, 116, 102, 0.9) 0%, 
+                rgba(141, 116, 102, 0.5) 60%, 
+                rgba(141, 116, 102, 0.2) 100%);
+    
+    box-shadow: 0 15px 35px rgba(141, 116, 102, 0.4), 
+                inset 0 0 20px rgba(255, 255, 255, 0.4);
+    
+    border: 1px solid rgba(141, 116, 102, 0.6);
+    animation: float-up 15s linear infinite;
+}
+
+/* 3. Индивидуальные настройки (размеры и позиции) */
+.bubble:nth-child(1) { width: 80px; height: 80px; left: 5%; animation-duration: 12s; }
+.bubble:nth-child(2) { width: 140px; height: 140px; left: 15%; animation-duration: 18s; animation-delay: 2s; }
+.bubble:nth-child(3) { width: 60px; height: 60px; left: 35%; animation-duration: 14s; animation-delay: 5s; }
+.bubble:nth-child(4) { width: 190px; height: 190px; left: 50%; animation-duration: 22s; animation-delay: 1s; }
+.bubble:nth-child(5) { width: 100px; height: 100px; left: 70%; animation-duration: 16s; animation-delay: 4s; }
+.bubble:nth-child(6) { width: 120px; height: 120px; left: 85%; animation-duration: 20s; animation-delay: 7s; }
+.bubble:nth-child(7) { width: 50px; height: 50px; left: 25%; animation-duration: 11s; animation-delay: 3s; }
+.bubble:nth-child(8) { width: 160px; height: 160px; left: 60%; animation-duration: 25s; }
+.bubble:nth-child(9) { width: 90px; height: 90px; left: 95%; animation-duration: 15s; animation-delay: 6s; }
+
+/* 4. Анимация полета с покачиванием */
+@keyframes float-up {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8; /* Быстро становятся яркими */
+    }
+    50% {
+        transform: translateY(-60vh) translateX(50px) rotate(180deg); /* Качаются вправо */
+    }
+    100% {
+        transform: translateY(-130vh) translateX(-30px) rotate(360deg); /* Улетают вверх */
+        opacity: 0;
+    }
+}
+
+/* 5. Поднимаем карточку списка выше пузырьков */
+.fridge-list-card {
+    position: relative;
+    z-index: 10; 
+}
+.video-section-inner {
+    margin-top: 100px;
+    padding-bottom: 120px;
+    position: relative;
+    z-index: 10;
+}
+
+.video-block-title {
+    font-family: 'Soledago', serif;
+    font-size: 2.2rem;
+    color: var(--accent-brown);
+    text-align: center;
+    text-transform: lowercase;
+}
+
+.gold-line-short {
+    width: 60px;
+    height: 3px;
+    background: #b5a073;
+    margin: 15px auto 50px;
+}
+
+/* СЛАЙДЕР */
+.video-slider-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+
+.video-window {
+    width: 700px; /* Ширина экрана */
+    height: 400px;
+    background: rgba(255, 255, 255, 0.3); /* Прозрачность для пузырьков */
+    backdrop-filter: blur(8px);
+    border-radius: 50px;
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 30px 60px rgba(141, 116, 102, 0.15);
+    overflow: hidden; /* Скрываем лишние видео */
+    position: relative;
+}
+
+.video-track {
+    display: flex;
+    transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+    height: 100%;
+}
+
+.video-slide {
+    min-width: 100%; /* Каждый слайд занимает все окно */
+    height: 100%;
+}
+
+.video-slide video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 35px;
+    background: #000;
+}
+
+/* СТРЕЛКИ */
+.slider-arrow {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid var(--accent-brown);
+    background: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.slider-arrow:hover {
+    background: var(--accent-brown);
+}
+
+.slider-arrow svg {
+    width: 30px;
+    fill: var(--accent-brown);
+}
+
+.slider-arrow:hover svg {
+    fill: white;
+}
+
+/* БУСИНЫ */
+.video-dots-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 40px;
+}
+
+.v-dot {
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--accent-brown);
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.v-dot.active {
+    background: var(--accent-brown);
+    transform: scale(1.3);
+}
+:root {
+    --f-brown: #8D7466;
+    --f-gold: #b5a073;
+}
+
+.awesome-footer {
+    position: relative;
+    padding: 120px 20px 60px;
+    background-color: #F9F6F2;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+/* СТЕКЛЯННАЯ КАРТОЧКА */
+.footer-glass-card {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 1200px;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 60px;
+    padding: 60px;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 40px;
+    box-shadow: 0 40px 100px rgba(141, 116, 102, 0.12);
+}
+
+/* ЛЕВО: ЗАГОЛОВОК */
+.f-title {
+    font-family: 'Soledago', serif;
+    font-size: 3.5rem;
+    line-height: 0.85;
+    color: var(--f-brown);
+    margin: 20px 0;
+    text-transform: lowercase;
+}
+
+.f-logo-circle {
+    width: 80px; height: 80px;
+    border: 2px solid var(--f-brown);
+    border-radius: 50%;
+    display: flex;
+    align-items: center; justify-content: center;
+    background: #fff;
+}
+
+/* ЦЕНТР: ПОЧТА */
+.f-label {
+    display: block;
+    font-family: 'Soledago', serif;
+    font-size: 1.2rem;
+    color: var(--f-gold);
+    margin-bottom: 25px;
+    letter-spacing: 2px;
+}
+
+.f-link-modern {
+    display: block;
+    font-family: 'Courier New', monospace;
+    font-size: 1.6rem;
+    color: var(--f-brown);
+    text-decoration: none;
+    margin-bottom: 10px;
+    transition: 0.3s;
+}
+
+.f-link-modern span { color: var(--f-gold); font-weight: bold; }
+
+.f-link-modern:hover { transform: translateX(10px); color: var(--f-gold); }
+
+/* ПРАВО: СОЦСЕТИ И ТОТ САМЫЙ ЭФФЕКТ ТИК-ТОКА */
+.social-pills { display: flex; flex-direction: column; gap: 15px; }
+
+.social-pill {
+    padding: 15px 30px;
+    border: 1.5px solid var(--f-brown);
+    border-radius: 40px;
+    color: var(--f-brown);
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    transition: all 0.4s ease;
+    position: relative;
+    background: #fff;
+}
+
+/* Инстаграм: просто заливка */
+.social-pill.instagram:hover {
+    background: var(--f-brown);
+    color: #fff;
+    transform: translateY(-5px);
+}
+
+/* ТИК-ТОК: НЕОНОВЫЙ ГЛЮК (Синий и Красный) */
+.social-pill.tiktok:hover {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+    transform: translateY(-5px);
+    /* Эффект свечения Тик-Тока */
+    box-shadow: 6px 0 0 rgba(255, 0, 80, 0.8), -6px 0 0 rgba(0, 242, 234, 0.8);
+}
+
+/* ДЕКОРАТИВНЫЕ ШАРЫ НА ФОНЕ */
+.footer-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 1;
+    opacity: 0.6;
+}
+.orb-1 { width: 400px; height: 400px; background: #E8DED1; top: -100px; left: 10%; }
+.orb-2 { width: 350px; height: 350px; background: #D1C7C1; bottom: -50px; right: 10%; }
+
+.f-bottom {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding-top: 40px;
+    margin-top: 20px;
+    border-top: 1px solid rgba(141, 116, 102, 0.1);
+    opacity: 0.5;
+    font-size: 0.8rem;
+}
+/* Основное окно (ориентируемся на горизонтальное видео) */
+.video-window.universal-mode {
+    width: 700px; 
+    height: 400px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    border-radius: 40px;
+    padding: 15px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 30px 60px rgba(141, 116, 102, 0.15);
+    margin: 0 auto;
+}
+
+.video-track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.video-slide {
+    min-width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center; /* Центрируем вертикалки */
+    align-items: center;
+}
+
+/* Стиль для ГОРИЗОНТАЛЬНОГО (заполняет всё) */
+.video-slide.horizontal video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    border-radius: 30px;
+}
+
+/* Стиль для ВЕРТИКАЛЬНЫХ (вписываются по высоте) */
+.video-slide.vertical video {
+    height: 100%;
+    width: auto; /* Не растягиваем в ширину! */
+    aspect-ratio: 9 / 16;
+    object-fit: contain;
+    border-radius: 25px;
+    background: #000; /* Черные поля только внутри видео-рамки */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* Бусинки */
+.v-dot {
+    width: 10px; height: 10px;
+    border: 2px solid #8D7466;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+.v-dot.active { background: #8D7466; transform: scale(1.3); }
+.river-section {
+    position: relative;
+    padding: 150px 20px;
+    /* Глубокий синий фон из палитры */
+    background: linear-gradient(180deg, #567c8d 0%, #214156 100%);
+    overflow: hidden;
+}
+
+/* ФОНОВЫЙ ТЕКСТ (Неман) */
+.river-bg-text {
+    font-size: 18vw;
+    color: rgba(245, 239, 235, 0.05); /* Светлый Sand с минимальной прозрачностью */
+    pointer-events: none;
+}
+
+.river-title {
+    color: #f5efeb; /* Sand */
+    font-family: 'Soledago', serif;
+}
+
+/* КАРТОЧКИ ЭССЕ (Мягкая дымка) */
+.essay-card {
+    background: rgba(200, 217, 230, 0.1); /* Цвет Dusty Sky как база */
+    backdrop-filter: blur(15px); /* Тот самый туман */
+    border: 1px solid rgba(245, 239, 235, 0.2); /* Тонкая рамка цвета Sea Foam */
+    border-radius: 40px;
+    padding: 50px;
+    margin-bottom: 60px;
+    max-width: 850px;
+    transition: all 0.5s ease;
+}
+
+/* ПРАВОЕ/ЛЕВОЕ СМЕЩЕНИЕ */
+.essay-card:nth-child(even) { margin-left: auto; }
+
+.essay-card:hover {
+    background: rgba(200, 217, 230, 0.18);
+    transform: scale(1.02);
+    border-color: #f5efeb;
+}
+
+.essay-title {
+    font-family: 'Soledago', serif;
+    color: #f5efeb; /* Очень светлый акцент */
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-transform: lowercase;
+}
+
+.essay-text {
+    color: rgba(245, 239, 235, 0.85); /* Мягкий светлый текст */
+    line-height: 1.7;
+    font-family: Arial, sans-serif;
+    font-style: italic;
+    font-size: 1.15rem;
+}
+
+.essay-author {
+    display: block;
+    margin-top: 30px;
+    color: #f5efeb;
+    opacity: 0.6;
+    text-align: right;
+    font-size: 0.9rem;
+}
+
+/* ДЕКОРАТИВНЫЕ ПОТЕКИ / ВОЛНЫ (Как на фото) */
+.river-section::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: radial-gradient(circle at 20% 30%, rgba(200, 217, 230, 0.1) 0%, transparent 40%),
+                      radial-gradient(circle at 80% 70%, rgba(86, 124, 141, 0.2) 0%, transparent 50%);
+    z-index: 1;
+    pointer-events: none;
+}
+.essay-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
+    background-size: 200% 200%;
+    animation: waterGlint 6s infinite linear;
+    border-radius: 40px;
+    pointer-events: none;
+}
+
+@keyframes waterGlint {
+    0% { background-position: -200% -200%; }
+    100% { background-position: 200% 200%; }
+}
+.river-section {
+    position: relative;
+    padding: 150px 20px;
+    /* Основной фон — переход от синего к более светлому */
+    background: linear-gradient(180deg, #214156 0%, #567c8d 100%);
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* ОГРОМНОЕ СВЕТЛОЕ ПЯТНО (Блик солнца) */
+.river-light-glow {
+    position: absolute;
+    top: -10%;
+    right: -10%;
+    width: 70vw;
+    height: 70vw;
+    /* Используем цвет пены #f5efeb с прозрачностью */
+    background: radial-gradient(circle, rgba(245, 239, 235, 0.15) 0%, transparent 70%);
+    z-index: 0;
+    pointer-events: none;
+    animation: pulseGlow 10s infinite alternate ease-in-out;
+}
+
+/* СВЕТЛЫЙ ТУМАН СНИЗУ */
+.river-mist-layer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background: linear-gradient(to top, rgba(200, 217, 230, 0.2) 0%, transparent 100%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+@keyframes pulseGlow {
+    from { opacity: 0.4; transform: scale(1); }
+    to { opacity: 0.8; transform: scale(1.2); }
+}
+
+/* КАРТОЧКИ: Сделаем их чуть контрастнее на светлом фоне */
+.essay-card {
+    background: rgba(255, 255, 255, 0.12); /* Чуть плотнее белый */
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(245, 239, 235, 0.3);
+    box-shadow: 0 20px 50px rgba(33, 65, 86, 0.2);
+}
+
+/* ФОНОВЫЙ ТЕКСТ "НЕМАН" */
+.river-bg-text {
+    /* Сделаем его темнее, чтобы он "читался" сквозь светлый туман */
+    color: rgba(33, 65, 86, 0.2); 
+    font-size: 22vw; /* Еще больше для грандиозности */
+}
+.river-section::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 100px,
+        rgba(245, 239, 235, 0.03) 101px,
+        rgba(245, 239, 235, 0.03) 102px
+    );
+    z-index: 0;
+    pointer-events: none;
+}
+.river-section {
+    position: relative;
+    padding: 150px 20px;
+    background: #214156; /* Глубокий синий из твоей палитры */
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* СВЕТЛЫЙ ФОН: Эффект солнечного тумана сверху */
+.river-section::before {
+    content: '';
+    position: absolute;
+    top: -20%; left: -10%; width: 120%; height: 80%;
+    background: radial-gradient(circle, rgba(200, 217, 230, 0.25) 0%, transparent 70%);
+    filter: blur(50px);
+    z-index: 0;
+    animation: drift 20s infinite alternate ease-in-out;
+}
+
+@keyframes drift {
+    from { transform: rotate(-5deg) translate(-5%, -5%); }
+    to { transform: rotate(5deg) translate(5%, 5%); }
+}
+
+/* ИНТЕРАКТИВНЫЙ БЛИК (Светлое пятно за мышью) */
+.mouse-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(245, 239, 235, 0.12) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+}
+
+/* КАРТОЧКИ: Эффект покачивания на волнах */
+.essay-card.floating {
+    animation: floatOnWater 6s infinite ease-in-out;
+}
+
+/* Четные карточки качаются в другом ритме */
+.essay-card.floating:nth-child(even) {
+    animation-delay: 2s;
+}
+
+@keyframes floatOnWater {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    33% { transform: translateY(-10px) rotate(1deg); }
+    66% { transform: translateY(5px) rotate(-0.5deg); }
+}
+
+.essay-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px); /* Сильное размытие: карточка как льдинка */
+    border: 1px solid rgba(245, 239, 235, 0.2);
+    border-radius: 40px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+/* "ВОДНАЯ ПЫЛЬ" (Маленькие светлые точки) */
+.water-dust {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+#history.history-section {
+    position: relative !important;
+    background-color: #f5efeb !important; /* Цвет пены из палитры */
+    padding: 150px 0 !important;
+    overflow: hidden !important;
+    z-index: 1;
+}
+
+/* ФОНОВОЕ СЛОВО "ИСТОРИЯ" (на весь экран) */
+.bg-title-fade {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    font-family: 'Soledago', serif;
+    font-size: 22vw !important; /* Еще больше масштаб! */
+    color: rgba(141, 116, 102, 0.05) !important;
+    z-index: 0 !important;
+    white-space: nowrap;
+    pointer-events: none;
+    text-transform: lowercase;
+}
+
+/* ЛЕВЫЙ КРЕСТ (Огромный, аутентичный) */
+#history::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: -150px; /* Уходит за край */
+    width: 600px;
+    height: 600px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org" viewBox="0 0 100 100"><g opacity="0.15"><rect x="45" y="10" width="10" height="80" fill="%238D7466""")/>><rect x="10" y="45" width="80" height="10" fill="%238D7466""")/>><circle cx="50" cy="50" r="10" fill="%23567c8d""")/>><circle cx="50" cy="15" r="6" fill="%23b5a073""")/>><circle cx="50" cy="85" r="6" fill="%23b5a073""")/>><circle cx="15" cy="50" r="6" fill="%23b5a073""")/>><circle cx="85" cy="50" r="6" fill="%23b5a073""")/>></g></svg>');
+    background-repeat: no-repeat;
+    background-size: contain;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ПРАВЫЙ КРЕСТ (Другой формы) */
+#history::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: -100px;
+    width: 500px;
+    height: 500px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org" viewBox="0 0 100 100"><g opacity="0.1"><rect x="48" y="5" width="4" height="90" fill="%238D7466""")/>><rect x="5" y="48" width="90" height="4" fill="%238D7466""")/>><circle cx="50" cy="50" r="18" fill="none" stroke="%238D7466" stroke-width="1.5""")/>></g></svg>');
+    background-repeat: no-repeat;
+    background-size: contain;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ПОДЪЕМ КОНТЕНТА (Чтобы он был ПОВЕРХ декора) */
+.history-container, .history-header-wrapper, .history-timeline-nav {
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+/* СТИЛИ ТЕКСТА И ГОДА */
+.hist-year-display {
+    font-family: 'Soledago', serif;
+    font-size: 8rem !important; /* Грандиозный год */
+    color: #8D7466 !important;
+    line-height: 1;
+    margin: 0;
+    letter-spacing: -4px;
+}
+
+.text-bg-accent {
+    font-family: 'Soledago', serif;
+    font-size: 1.5rem !important;
+    color: #b5a073 !important; /* Золото */
+    letter-spacing: 10px !important;
+    text-transform: uppercase;
+}
+.voice-section {
+    position: relative;
+    /* Переходим на светлую схему из твоего референса */
+    background: linear-gradient(135deg, #f5efeb 0%, #c8d9e6 100%) !important;
+    overflow: hidden;
+    color: #214156; /* Темно-синий для текста вместо белого */
+}
+
+/* Сделаем пульсирующие волны более "стеклянными" */
+.sound-wave-circle {
+    border: 1px solid rgba(86, 124, 141, 0.2) !important;
+}
+
+/* Огромная надпись на фоне теперь будет благородного серо-голубого цвета */
+.voice-huge-title {
+    color: rgba(86, 124, 141, 0.08) !important;
+}
+/* Цвет заголовка секции */
+.section-title {
+    color: #214156 !important;
+}
+
+/* Печать (Seal) — сделаем её акцентной */
+.seal-center {
+    background: #567c8d !important;
+    color: #f5efeb !important;
+}
+
+.seal-text {
+    fill: #214156 !important;
+    font-weight: 600;
+}
+
+/* Окно видео с мягкой тенью, как на Pinterest */
+.video-window {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(33, 65, 86, 0.1);
+    border: 8px solid #ffffff; /* Белая рамка, как у фотокарточки */
+}
+
+/* Цитата героя */
+.hero-quote {
+    color: #567c8d !important;
+    font-style: italic;
+    border-left: 3px solid #c8d9e6;
+    padding-left: 15px;
+}
+.ocean-bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40vh; /* Волны будут только снизу, не перекрывая текст */
+  min-height: 200px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.waves {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Анимация слоев */
+.parallax > use {
+  animation: move-forever 25s cubic-bezier(.55,.5,.45,.5) infinite;
+}
+.parallax > use:nth-child(1) { animation-delay: -2s; animation-duration: 7s; }
+.parallax > use:nth-child(2) { animation-delay: -3s; animation-duration: 10s; }
+.parallax > use:nth-child(3) { animation-delay: -4s; animation-duration: 13s; }
+.parallax > use:nth-child(4) { animation-delay: -5s; animation-duration: 20s; }
+
+@keyframes move-forever {
+  0% { transform: translate3d(-90px,0,0); }
+  100% { transform: translate3d(85px,0,0); }
+}
+
+/* Поднимаем контент, чтобы он был НАД волнами */
+.voice-container, .voice-header-wrapper {
+  position: relative;
+  z-index: 10;
+}
+.slider-section {
+    position: relative;
+    background-color: #d1cec7; /* Базовый беж */
+    overflow: hidden;
+    padding: 100px 0;
+    display: flex;
+    justify-content: center;
+}
+
+/* Контейнер для неона */
+.slider-neon-bg {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    filter: blur(100px); /* Сильное размытие для неона */
+    opacity: 0.6;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Красивые оттенки неона */
+.neon-blob {
+    position: absolute;
+    border-radius: 50%;
+    animation: moveNeon 25s infinite alternate ease-in-out;
+}
+
+.blob-1 {
+    width: 500px; height: 500px;
+    background: rgba(200, 217, 230, 0.7); /* Нежно-голубой */
+    top: -10%; left: -5%;
+}
+
+.blob-2 {
+    width: 600px; height: 600px;
+    background: rgba(91, 109, 122, 0.3); /* Стальной синий */
+    bottom: -5%; right: -5%;
+    animation-delay: -7s;
+}
+
+.blob-3 {
+    width: 400px; height: 400px;
+    background: rgba(245, 239, 235, 0.8); /* Жемчужный */
+    top: 30%; right: 20%;
+    animation-delay: -12s;
+}
+
+@keyframes moveNeon {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(10%, 15%) scale(1.2); }
+}
+
+/* Контент поверх неона */
+.slider-wrapper {
+    position: relative;
+    z-index: 10;
+}
+
+/* Фотокарточка с эффектом "стекла" */
+.slide-img-wrap {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px); /* Эффект матового стекла */
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.1);
+    transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.slide:hover .slide-img-wrap {
+    transform: translateY(-10px) rotate(1deg);
+}
+.nav-btn {
+    background: transparent !important;
+    border: 1px solid rgba(91, 109, 122, 0.2) !important;
+    color: #3e4b54 !important;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 4px;
+    transition: all 0.5s ease;
+    cursor: pointer;
+}
+
+.nav-btn:hover {
+    background: rgba(91, 109, 122, 0.1) !important;
+    box-shadow: 0 0 20px rgba(91, 109, 122, 0.2);
+    letter-spacing: 8px; /* Твой любимый эффект растягивания */
+}
+/* ОБЩИЙ ФОН ДЛЯ ВСЕХ СЕКЦИЙ — "СШИВАЕМ" ИХ */
+.slider-section, .voice-section {
+    position: relative;
+    background-color: #d1cec7 !important; /* Твой базовый беж */
+    
+    /* УБИРАЕМ MARGINS (они создают дыры) */
+    margin: 0 !important; 
+    
+    /* УВЕЛИЧИВАЕМ PADDING (это создаст расстояние внутри цветного фона) */
+    padding: 180px 0 !important; /* Было 100px, теперь 180px для простора */
+    
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ТРЮК ДЛЯ MAC: Нахлест в 2 пикселя, чтобы стык ИСЧЕЗ */
+section + section {
+    margin-top: -2px !important;
+}
+
+/* НЕОНОВОЕ ОБЛАКО — делаем его "сквозным" */
+.neon-glow {
+    position: absolute;
+    top: 0; left: 0; 
+    width: 100%; 
+    height: 100%;
+    filter: blur(120px); 
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* Мягкие неоновые пятна */
+.neon-glow::before, .neon-glow::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    animation: neonFloat 25s infinite alternate ease-in-out;
+}
+
+.neon-glow::before {
+    width: 600px; height: 600px;
+    background: rgba(200, 217, 230, 0.8); /* Морская волна */
+    top: -15%; left: -10%;
+}
+
+.neon-glow::after {
+    width: 700px; height: 700px;
+    background: rgba(91, 109, 122, 0.3); /* Стальной синий */
+    bottom: -15%; right: -10%;
+}
+
+@keyframes neonFloat {
+    0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    100% { transform: translate(15%, 10%) rotate(10deg) scale(1.15); }
+}
+
+
+
+
+/* Изначально скрываем ссылки и делим их на слои */
+.main-menu a, .main-menu .divider {
+    opacity: 0;
+    transform: translateY(15px); /* Смещение вниз для эффекта всплытия */
+    animation: fadeThroughCloud 1.2s cubic-bezier(0.2, 1, 0.3, 1) forwards;
+}
+
+/* Эффект проявления из тумана */
+@keyframes fadeThroughCloud {
+    0% {
+        opacity: 0;
+        filter: blur(10px); /* В начале они размыты как облако */
+        transform: translateY(15px);
+    }
+    100% {
+        opacity: 1;
+        filter: blur(0); /* В конце становятся четкими */
+        transform: translateY(0);
+    }
+}
+
+/* ПООЧЕРЕДНОЕ ПОЯВЛЕНИЕ (Задержка для каждого пункта) */
+.main-menu a:nth-child(1) { animation-delay: 0.2s; }
+.main-menu a:nth-child(3) { animation-delay: 0.4s; }
+.main-menu a:nth-child(5) { animation-delay: 0.6s; }
+.main-menu a:nth-child(7) { animation-delay: 0.8s; }
+.main-menu a:nth-child(9) { animation-delay: 1.0s; }
+
+/* Разделители тоже проявляются, но позже всех и мягче */
+.divider {
+    animation-delay: 1.2s !important;
+    animation-duration: 2s !important;
+}
+.main-menu::before {
+    /* Добавляем анимацию к твоему белому облаку */
+    animation: cloudBreath 15s infinite alternate ease-in-out;
+}
+
+@keyframes cloudBreath {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
+    100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.9; }
+}
+:root {
+    /* Цвета старого города и природы */
+    --old-brick: #8b4513; /* Глубокий терракот */
+    --forest-green: #2d4f1e; /* Хвоя */
+    --river-deep: #1a3c5a; /* Неман */
+    --glow-warm: rgba(255, 215, 0, 0.15); /* Золотистый отсвет */
+}
+
+.main-menu {
+    position: relative;
+    width: 100%;
+    min-height: 450px;
+    background: #fff;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    overflow: hidden;
+    padding-bottom: 50px;
+}
+
+/* 1. ЭФФЕКТНЫЙ ПЕРЕХОД СНИЗУ (ФОРМА ВЕЕРА) */
+/* Создаем огромную дугу, которая "выталкивает" меню вверх */
+.main-menu::after {
+    content: "";
+    position: absolute;
+    bottom: -150px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140%;
+    height: 400px;
+    background: #fff;
+    border-radius: 50%; /* Тот самый веер/арка */
+    box-shadow: 0 -30px 100px rgba(0, 0, 0, 0.05);
+    z-index: 5;
+}
+
+/* 2. КОНТЕЙНЕР-ОБЛАКО (С КРАСКАМИ, НО БЕЗ ГРЯЗИ) */
+.menu-container {
+    position: relative;
+    z-index: 10;
+    padding: 25px 60px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    border-radius: 120px;
+    
+    /* Контурное свечение: имитация солнечного блика на золоте */
+    border: 1px solid rgba(139, 69, 19, 0.2);
+    box-shadow: 
+        0 15px 45px rgba(0, 0, 0, 0.05),
+        0 0 30px var(--glow-warm);
+        
+    display: flex;
+    gap: 35px;
+    align-items: center;
+}
+
+/* 3. ТЕКСТ (КРАСИВЫЙ И ЧИТАЕМЫЙ) */
+.menu-container a {
+    color: #333;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: 0.4s ease;
+}
+
+.menu-container a:hover {
+    color: var(--old-brick);
+    transform: scale(1.05);
+    text-shadow: 0 5px 15px rgba(139, 69, 19, 0.2);
+}
+
+/* 4. "РЫБКИ" (АКЦЕНТНЫЕ ЦВЕТА С ФОТО) */
+.sphere {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    filter: blur(110px);
+    z-index: 2;
+    opacity: 0.25;
+    animation: move-organic 20s infinite alternate ease-in-out;
+}
+.aqua-1 { background: var(--river-deep); top: -10%; left: 15%; }
+.aqua-2 { background: var(--forest-green); bottom: 10%; right: 15%; animation-delay: -5s; }
+
+/* 5. ФОНОВЫЙ ТЕКСТ (ЭЛИТНЫЙ ВОДЯНОЙ ЗНАК) */
+.menu-bg-text {
+    position: absolute;
+    top: 15%;
+    font-size: 24vw;
+    font-weight: 950;
+    color: rgba(139, 69, 19, 0.03); /* Цвет старого кирпича, едва видный */
+    text-transform: uppercase;
+    z-index: 1;
+    pointer-events: none;
+    letter-spacing: -5px;
+}
+
+@keyframes move-organic {
+    from { transform: translate(-50px, -20px) rotate(0deg); }
+    to { transform: translate(50px, 40px) rotate(10deg); }
+}
+html {
+    scroll-behavior: smooth; /* Плавная прокрутка ко всем якорям */
+}
+.clickable-name { cursor: pointer; pointer-events: all; }
+ /* Чтобы текст в круге был кликабельным */
+    .clickable-name { cursor: pointer !important; fill: #567c8d; font-weight: bold; }
+    .clickable-name:hover { fill: #000; }
+    .video-window video { background: #000; }
+    
+
+    
